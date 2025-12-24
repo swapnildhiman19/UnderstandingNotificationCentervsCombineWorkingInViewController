@@ -178,6 +178,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Set ourselves as the notification delegate
         UNUserNotificationCenter.current().delegate = self
+        MetricKitManager.shared.startMonitoring()
 
         // Setup window
 //        window = UIWindow(frame: UIScreen.main.bounds)

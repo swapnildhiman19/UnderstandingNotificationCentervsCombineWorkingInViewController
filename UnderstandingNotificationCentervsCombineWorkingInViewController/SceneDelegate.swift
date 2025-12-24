@@ -176,7 +176,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, UNUserNotificationCente
 
     private func handleIncomingURL(_ url: URL) {
         print("📱 App received URL: \(url)")
-
+/*
         if let destination = DeepLinkHandler.shared.parse(url: url) {
             // Post notification to main VC
             NotificationCenter.default.post(
@@ -185,6 +185,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, UNUserNotificationCente
                 userInfo: ["destination": destination]
             )
         }
+ */
     }
 
     private func handleDeepLink(_ url: URL) {
