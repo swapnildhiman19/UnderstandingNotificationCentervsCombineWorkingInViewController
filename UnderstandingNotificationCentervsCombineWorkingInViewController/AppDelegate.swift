@@ -178,6 +178,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Set ourselves as the notification delegate
         UNUserNotificationCenter.current().delegate = self
+        OOMDetector.shared.applicationDidLaunch()
         MetricKitManager.shared.startMonitoring()
 
         // Setup window
@@ -188,6 +189,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        window?.makeKeyAndVisible()
 
         return true
+    }
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        OOMDetector.shared.applicationDidEnterBackground()
+    }
+    
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        OOMDetector.shared.applicationDidEnterForeground()
+    }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        OOMDetector.shared.applicationWillTerminate()
+    }
+    
+    func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        OOMPreventionManager.shared.evaluateMemoryPressure()
     }
 }
 

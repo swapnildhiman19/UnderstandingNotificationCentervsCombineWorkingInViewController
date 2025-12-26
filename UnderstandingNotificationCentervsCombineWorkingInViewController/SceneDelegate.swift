@@ -129,7 +129,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, UNUserNotificationCente
 //        window?.rootViewController = gestureViewController
 //        window?.makeKeyAndVisible()
 
-        let taskListVC = TaskListViewController(style: .plain)
+//        let taskListVC = TaskListViewController(style: .plain)
 //        let urlSessionSharedDataTaskVC = URLSessionSharedDataTaskViewController()
 //        let downloadViewController = DownloadViewController()
 //        let oAuthViewController = OAuthViewController()
@@ -150,8 +150,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, UNUserNotificationCente
 //        let runLoopDemoVC = RunLoopDemoViewController()
 //        let multipleTimersVC = MultipleTimersViewController()
 //        let gestureVC = GestureViewController()
+        let productDetailWithPageLoadTrackingVC = ProductDetailViewControllerWithPageLoadTracking(productId: "123")
         let navigationController = UINavigationController(
-            rootViewController: taskListVC
+            rootViewController: productDetailWithPageLoadTrackingVC
         )
         navigationController.navigationBar.prefersLargeTitles = true
 

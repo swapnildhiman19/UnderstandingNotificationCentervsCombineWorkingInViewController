@@ -234,6 +234,7 @@ enum CrashType {
     case hang
     case crash
     case cpuException
+    case oom
 }
 
 //MARK: Helper Analytics and CrashReported class
