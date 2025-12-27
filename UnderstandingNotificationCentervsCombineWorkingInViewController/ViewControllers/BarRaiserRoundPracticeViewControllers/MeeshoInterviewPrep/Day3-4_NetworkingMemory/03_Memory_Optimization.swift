@@ -6,7 +6,7 @@
 // The interviewer reduced peak memory usage and OOMs by ~50%.
 // This file covers all memory optimization techniques.
 // ============================================================================
-
+/*
 import Foundation
 import UIKit
 
@@ -350,4 +350,4 @@ class BatchProcessor {
  │                                                                             │
  └─────────────────────────────────────────────────────────────────────────────┘
 */
-
+*/

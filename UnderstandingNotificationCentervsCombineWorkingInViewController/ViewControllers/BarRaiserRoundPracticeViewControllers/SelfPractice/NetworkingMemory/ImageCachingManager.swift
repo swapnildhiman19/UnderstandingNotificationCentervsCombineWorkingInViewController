@@ -284,6 +284,5 @@ class ImagePrefetchingDataSource: NSObject, UICollectionViewDataSourcePrefetchin
     func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
         let urls = indexPaths.compactMap { imageURLProvider?($0) }
         ImageCacheManager.shared.cancelPrefetch(urls: urls)
-    }
-    
+    }    
 }
