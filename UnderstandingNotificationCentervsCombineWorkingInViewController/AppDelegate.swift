@@ -175,7 +175,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-
+        
+        let shouldUseSafeMode = CrashLoopDetector.shared.checkOnLaunch()
+        
+        if shouldUseSafeMode {
+            SafeModeManager.shared.activateSafeMode()
+            setupSafeModeUI()
+        } else {
+            //setupNormalApp()
+        }
+        
+        
         // Set ourselves as the notification delegate
         UNUserNotificationCenter.current().delegate = self
         OOMDetector.shared.applicationDidLaunch()
@@ -191,16 +201,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    func setupSafeModeUI(){
+        NotificationCenter.default.post(name: .safeModeActivated, object: nil)
+    }
+    
     func applicationDidEnterBackground(_ application: UIApplication) {
         OOMDetector.shared.applicationDidEnterBackground()
+        CrashLoopDetector.shared.markCleanShutDown()
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
         OOMDetector.shared.applicationDidEnterForeground()
+        CrashLoopDetector.shared.markBecomingActive()
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
         OOMDetector.shared.applicationWillTerminate()
+        CrashLoopDetector.shared.markCleanShutDown()
     }
     
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
@@ -252,5 +269,78 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         let title = response.notification.request.content.title
         print("Title was \(title)")
         completionHandler()
+    }
+}
+
+class SafeModeBannerView : UIView {
+    private let messageLabel: UILabel = {
+        let label = UILabel()
+        label.text = "We're experiencing issues. Some features may be limited"
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 14)
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupUI(){
+        backgroundColor = UIColor.orange
+        addSubview(messageLabel)
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8)
+        ])
+    }
+}
+
+class SafeModeAwareViewController : UIViewController {
+    private var safeModeObserver: NSObjectProtocol?
+    
+    override func viewDidLoad() {
+         super.viewDidLoad()
+        
+        //Observing
+        safeModeObserver = NotificationCenter.default.addObserver(forName: .safeModeActivated, object: nil, queue: .main, using: { [weak self] _ in
+            self?.handleSafeModeActivation()
+        })
+        
+        //Current state
+        if SafeModeManager.shared.isInSafeMode {
+            handleSafeModeActivation()
+        }
+    }
+    
+    private func handleSafeModeActivation(){
+        let banner = SafeModeBannerView()
+        view.addSubview(banner)
+        banner.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            banner.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            banner.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            banner.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        ])
+        
+        disableUnsafeFeatures()
+    }
+    
+    private func disableUnsafeFeatures(){
+        if !SafeModeManager.shared.isFeatureEnabled(.videoPlayback) {
+            //Hide video player
+        }
+        if !SafeModeManager.shared.isFeatureEnabled(.animatedBanners){
+            //Stop animations
+        }
     }
 }

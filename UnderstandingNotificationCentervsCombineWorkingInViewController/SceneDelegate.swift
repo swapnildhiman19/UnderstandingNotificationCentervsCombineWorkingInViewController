@@ -150,9 +150,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, UNUserNotificationCente
 //        let runLoopDemoVC = RunLoopDemoViewController()
 //        let multipleTimersVC = MultipleTimersViewController()
 //        let gestureVC = GestureViewController()
-        let productDetailWithPageLoadTrackingVC = ProductDetailViewControllerWithPageLoadTracking(productId: "123")
+//        let productDetailWithPageLoadTrackingVC = ProductDetailViewControllerWithPageLoadTracking(productId: "123")
+        let serverDrivenUIViewController = SDUIDemoViewController()
         let navigationController = UINavigationController(
-            rootViewController: productDetailWithPageLoadTrackingVC
+            rootViewController: serverDrivenUIViewController
         )
         navigationController.navigationBar.prefersLargeTitles = true
 

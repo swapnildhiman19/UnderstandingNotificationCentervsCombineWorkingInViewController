@@ -166,7 +166,7 @@ class BatchProcessor {
         }
     }
     
-    private func processItem(_ item: Data) {
+    private func processItem(_  item: Data) {
         _ = UIImage(data: item)
     }
 }
